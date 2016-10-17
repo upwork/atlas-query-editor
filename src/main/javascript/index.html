@@ -1,0 +1,140 @@
+<!--
+@license Atlas Query Editor
+
+Copyright (C) 2016 Upwork.com
+
+This software may be modified and distributed under the terms
+of the MIT license.  See the LICENSE file for details.
+-->
+<!DOCTYPE html>
+<html lang="en" ng-app="atlas.query.editor">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="-1"/>
+    <meta http-equiv="CACHE-CONTROL" content="NO-CACHE"/>
+
+    <base href="/"/>
+
+    <title>Atlas Query Editor</title>
+
+    <!-- Vendor CSS -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- /.Vendor CSS -->
+
+    <!-- Status CSS -->
+    <!-- injector:css -->
+    <!-- endinjector -->
+    <!-- /.Status CSS -->
+
+    <!-- Vendor JS -->
+    <!-- bower:js -->
+    <!-- endbower -->
+    <!-- /.Vendor JS -->
+
+    <!-- Status JS -->
+    <!-- injector:js -->
+    <!-- endinjector -->
+    <!-- /.Status JS -->
+
+
+    <style>
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            /* Margin bottom by footer height */
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            /* Set the fixed height of the footer here */
+            height: 60px;
+            background-color: #676767;
+        }
+
+        legend {
+            display: inline-block;
+            width: auto;
+            max-width: 100%;
+            margin-bottom: 5px;
+            font-size: inherit;
+            font-weight: bold;
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body ng-controller="EditorController as editorCtrl">
+
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-brand">Atlas Query Editor</span>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <div class="btn-toolbar pull-right" role="toolbar">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default navbar-btn"
+                            ng-click="editorCtrl.openSave()"
+                            ng-disabled="!editorCtrl.canOpenSave()">
+                        <i class="fa fa-save"></i>
+                        <span>Save</span>
+                    </button>
+                    <button type="button" class="btn btn-default navbar-btn"
+                            ng-click="editorCtrl.openLoad()">
+                        <i class="fa fa-folder-open"></i>
+                        <span>Load</span>
+                    </button>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default navbar-btn"
+                            ng-click="editorCtrl.openExport()"
+                            ng-disabled="!editorCtrl.canOpenExport()">
+                        <i class="fa fa-upload"></i>
+                        <span>Export</span>
+                    </button>
+                    <button type="button" class="btn btn-default navbar-btn"
+                            ng-click="editorCtrl.openImport()">
+                        <i class="fa fa-download"></i>
+                        <span>Import</span>
+                    </button>
+                </div>
+            </div>
+        </div><!--/.navbar-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+    <form name="atlasQueryForm" autocomplete="off">
+        <atlas-connect host="editorCtrl.data.host"></atlas-connect>
+        <atlas-query-editor query="editorCtrl.data.query"></atlas-query-editor>
+    </form>
+
+    <atlas-query-result query="editorCtrl.data.query"></atlas-query-result>
+</div>
+
+<hr/>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">Copyright 2016 Upwork.com</p>
+    </div>
+</footer>
+
+</body>
+</html>

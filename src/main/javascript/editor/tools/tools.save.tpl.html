@@ -1,0 +1,62 @@
+<!--
+@license Atlas Query Editor
+
+Copyright (C) 2016 Upwork.com
+
+This software may be modified and distributed under the terms
+of the MIT license.  See the LICENSE file for details.
+-->
+<form name="saveQueryForm" novalidate="novalidate" ng-submit="ctrl.save(saveQueryForm)">
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Save Query</h3>
+    </div>
+    <div class="modal-body">
+
+        <p>The query will be saved at the local storage of your browser. Please use a different name for different queries.</p>
+
+        <div class="form-group" ng-class="{'has-error' : (saveQueryForm.$submitted || saveQueryForm.queryName.$dirty) && saveQueryForm.queryName.$invalid}">
+            <label class="control-label" for="queryName">Name</label>
+            <input type="text" name="queryName" id="queryName" class="form-control"
+                   ng-model="ctrl.name"
+                   ng-required="true"/>
+            <div role="alert"
+                 ng-if="(saveQueryForm.$submitted || saveQueryForm.queryName.$dirty) && saveQueryForm.queryName.$invalid"
+                 ng-messages="saveQueryForm.queryName.$error">
+                <p ng-message="required" class="help-block">Please enter a value for this field.</p>
+            </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error' : (saveQueryForm.$submitted || saveQueryForm.queryDescription.$dirty) && saveQueryForm.queryDescription.$invalid}">
+            <label class="control-label" for="queryDescription">Description</label>
+            <textarea name="queryDescription" id="queryDescription" rows="6" class="form-control"
+                      ng-model="ctrl.description"
+                      ng-required="true"></textarea>
+            <div role="alert"
+                 ng-if="(saveQueryForm.$submitted || saveQueryForm.queryDescription.$dirty) && saveQueryForm.queryDescription.$invalid"
+                 ng-messages="saveQueryForm.queryDescription.$error">
+                <p ng-message="required" class="help-block">Please enter a value for this field.</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="queryHost">Host</label>
+            <input type="text" name="queryHost" id="queryHost" class="form-control"
+                   ng-model="ctrl.data.host"
+                   ng-required="true"
+                   readonly="readonly"/>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label" for="queryHost">Query</label>
+            <input type="text" name="queryString" id="queryString" class="form-control"
+                   ng-model="ctrl.data.query.q"
+                   ng-required="true"
+                   readonly="readonly"/>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> <span>Save</span></button>
+        <button class="btn btn-warning" type="button" ng-click="ctrl.cancel()"><i class="fa fa-close"></i> <span>Cancel</span></button>
+    </div>
+</form>

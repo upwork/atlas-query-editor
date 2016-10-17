@@ -1,0 +1,380 @@
+<!--
+@license Atlas Query Editor
+
+Copyright (C) 2016 Upwork.com
+
+This software may be modified and distributed under the terms
+of the MIT license.  See the LICENSE file for details.
+-->
+<section>
+    <!-- Editor Form -->
+    <ng-form name="queryForm">
+
+        <div class="form-group">
+            <label for="query">Query</label>
+            <textarea class="form-control" query="script" id="query" autofocus="autofocus"
+                      ui-codemirror="queryCtrl.view.editor"
+                      ng-model="queryCtrl.query.q"
+                      ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }"></textarea>
+
+            <div ng-if="!queryCtrl.view.readOnly()">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-default"
+                            ng-click="queryCtrl.view.showExtraOptions = !queryCtrl.view.showExtraOptions">
+                        <span ng-if="!queryCtrl.view.showExtraOptions"><i class="fa fa-caret-right"></i> Show</span>
+                        <span ng-if="queryCtrl.view.showExtraOptions"><i class="fa fa-caret-down"></i> Hide</span>
+                        Additional Parameters
+                    </button>
+                </div>
+                <div>
+                    <p class="help-block">
+                        <span>Press <kbd>alt-space</kbd> to activate autocompletion.</span>
+                    </p>
+                    <p>
+                        <span>Press <kbd>ctrl-alt-f</kbd> or press here
+                            <button name="format" type="button" class="btn btn-default" ng-click="queryCtrl.actions.format()">
+                            <i class="fa fa-align-left"></i> <span>Format</span>
+                            </button> to activate autoformat
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div ng-if="queryCtrl.view.readOnly()">
+                <p class="help-block">
+                    <span>No valid connection with an Atlas Server, editor is disabled</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Additional Parameters -->
+        <div ng-if="!queryCtrl.view.readOnly() && queryCtrl.view.showExtraOptions">
+
+            <uib-tabset>
+
+                <uib-tab index="0">
+                    <uib-tab-heading>
+                        <span>Time</span>
+                    </uib-tab-heading>
+
+                    <div>
+
+                        <p class="help-block text-right">
+                            <a class="label label-default" href="https://github.com/Netflix/atlas/wiki/Graph#time" target="_blank"> <i class="fa fa-question-circle"></i> <span>Help</span></a>
+                        </p>
+
+                        <div class="form-group">
+                            <label for="startTime">Start Time</label>
+                            <input type="text" class="form-control" id="startTime" ng-model="queryCtrl.query.s"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="endTime">End Time</label>
+                            <input type="text" class="form-control" id="endTime" ng-model="queryCtrl.query.e"/>
+                        </div>
+                    </div>
+                </uib-tab>
+
+                <uib-tab index="1">
+                    <uib-tab-heading>
+                        <span>Image Flags</span>
+                    </uib-tab-heading>
+
+                    <div>
+                        <p class="help-block text-right">
+                            <a class="label label-default" href="https://github.com/Netflix/atlas/wiki/Graph#image-flags" target="_blank"> <i class="fa fa-question-circle"></i> <span>Help</span></a>
+                        </p>
+
+                        <div class="form-group">
+                            <label for="title">Set the graph title</label>
+                            <input type="text" class="form-control" id="title" ng-model="queryCtrl.query.title"/>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="queryCtrl.query.no_legend"
+                                       ng-true-value="1"
+                                       ng-false-value="0"/>
+                                <span>Suppress the legend</span>
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="queryCtrl.query.no_legend_stats"
+                                       ng-true-value="1"
+                                       ng-false-value="0"/>
+                                <span>Suppresses summary stats for the legend</span>
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="queryCtrl.query.axis_per_line"
+                                       ng-true-value="1"
+                                       ng-false-value="0"/>
+                                <span>Put each line on a separate Y-axis</span>
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="queryCtrl.query.only_graph"
+                                       ng-true-value="1"
+                                       ng-false-value="0"/>
+                                <span>Only show the graph canvas</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="vision">Simulate different vision types</label>
+                            <select id="vision" class="form-control"
+                                    ng-model="queryCtrl.query.vision"
+                                    ng-options="v for v in ['normal','protanopia','protanomaly','deuteranopia','deuteranomaly','tritanopia','tritanomaly','achromatopsia','achromatomaly']">
+                            </select>
+                        </div>
+
+                    </div>
+                </uib-tab>
+
+
+                <uib-tab index="2">
+                    <uib-tab-heading>
+                        <span>Image Size</span>
+                    </uib-tab-heading>
+
+                    <div>
+
+                        <p class="help-block text-right">
+                            <a class="label label-default" href="https://github.com/Netflix/atlas/wiki/Graph#image-size" target="_blank"> <i class="fa fa-question-circle"></i> <span>Help</span></a>
+                        </p>
+
+                        <fieldset>
+                            <legend>Mode for controlling exact or relative sizing layout mode</legend>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="layout" id="layout_canvas" value="canvas"
+                                           ng-model="queryCtrl.query.layout">
+                                    Canvas: The width or height are for the canvas component within the chart. The actual image size will be calculated based on the number of entries in the legend, number of axes, etc. This is the default behavior.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="layout" id="layout_image" value="image"
+                                           ng-model="queryCtrl.query.layout">
+                                    Image: The width or height are for the final image not including the zoom parameter. To try and adhere to layout goals when using this mode everything below the X-axes will automatically be suppressed. Vertical alignment will still hold as long as all graphs use the same number of Y-axes. Horizontal alignment will still hold as long as all graphs use the same number of X-axes.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="layout" id="layout_iw" value="iw"
+                                           ng-model="queryCtrl.query.layout">
+                                    IW: Use exact image sizing for the width and canvas sizing for the height.
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="layout" id="layout_ih" value="ih"
+                                           ng-model="queryCtrl.query.layout">
+                                    IH: Use exact image sizing for the height and canvas sizing for the width.
+                                </label>
+                            </div>
+
+                        </fieldset>
+
+                        <div class="form-group">
+                            <label for="width">Width of the canvas or image</label>
+                            <input type="number" class="form-control" id="width" step="1" ng-model="queryCtrl.query.w"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="height">Height of the canvas or image</label>
+                            <input type="number" class="form-control" id="height" step="1" ng-model="queryCtrl.query.h"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zoom">Transform the size by a zoom factor</label>
+                            <input type="number" class="form-control" id="zoom" step="0.1" ng-model="queryCtrl.query.zoom"/>
+                        </div>
+
+                    </div>
+                </uib-tab>
+
+
+                <uib-tab index="3">
+                    <uib-tab-heading>
+                        <span>Text Flags</span>
+                    </uib-tab-heading>
+
+                    <div>
+
+                        <p class="help-block text-right">
+                            <a class="label label-default" href="https://github.com/Netflix/atlas/wiki/Graph#text-flags" target="_blank"> <i class="fa fa-question-circle"></i> <span>Help</span></a>
+                        </p>
+
+                        <div class="form-group">
+                            <label for="number_format">How to format numbers for text output types</label>
+                            <input type="text" class="form-control" id="number_format" step="0.1" ng-model="queryCtrl.query.number_format"/>
+                            <span class="help-block"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#dndec" target="_blank">Format options</a></span>
+                        </div>
+                    </div>
+                </uib-tab>
+
+                <uib-tab index="4">
+                    <uib-tab-heading>
+                        <span>Y-Axis</span>
+                    </uib-tab-heading>
+
+                    <div>
+
+                        <p class="help-block text-right">
+                            <a class="label label-default" href="https://github.com/Netflix/atlas/wiki/Graph#y-axis" target="_blank"> <i class="fa fa-question-circle"></i> <span>Help</span></a>
+                        </p>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="queryCtrl.query.stack"
+                                       ng-true-value="1"
+                                       ng-false-value="0"/>
+                                <span>Set the default line style to stack </span>
+                            </label>
+                        </div>
+
+                        <fieldset>
+                            <legend>Lower bound for the axis auto-style axis bound</legend>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="l" id="l_auto-style" value="auto-style"
+                                           ng-model="queryCtrl.query.l">
+                                    auto-style: automatically determine the bounds based on the data and the style settings for that data. In particular, if the line style is area or stack, then the bounds will be adjusted to show the filled area. This is the default behavior.
+
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="l" id="l_auto-data" value="auto-data"
+                                           ng-model="queryCtrl.query.l">
+                                    auto-data: automatically determine the bounds based on the data. This will only take into account the values of the lines. In the case of stack it will account for the position of the stacked lines, but not the filled area.
+                                </label>
+                            </div>
+
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Upper bound for the axis auto-style axis bound</legend>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="u" id="u_auto-style" value="auto-style"
+                                           ng-model="queryCtrl.query.u">
+                                    auto-style: automatically determine the bounds based on the data and the style settings for that data. In particular, if the line style is area or stack, then the bounds will be adjusted to show the filled area. This is the default behavior.
+
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="u" id="u_auto-data" value="auto-data"
+                                           ng-model="queryCtrl.query.u">
+                                    auto-data: automatically determine the bounds based on the data. This will only take into account the values of the lines. In the case of stack it will account for the position of the stacked lines, but not the filled area.
+                                </label>
+                            </div>
+
+                        </fieldset>
+
+                        <div class="form-group">
+                            <label for="ylabel">Label for the axis</label>
+                            <input type="text" class="form-control" id="ylabel" ng-model="queryCtrl.query.ylabel"/>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="palette">Color palette to use</label>
+                            <select class="form-control" id="palette" ng-model="queryCtrl.query.palette"
+                                    ng-options="p for p in ['armytage','epic','blues','greens','oranges','purples','reds']">
+                            </select>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="queryCtrl.query.o"
+                                       ng-true-value="1"
+                                       ng-false-value="0"/>
+                                <span>Use a logarithmic scale</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tick_labels">Set the mode to use for tick labels </label>
+                            <select class="form-control" id="tick_labels" ng-model="queryCtrl.query.tick_labels"
+                                    ng-options="p for p in ['decimal','binary','off']">
+                            </select>
+                        </div>
+
+                        <fieldset>
+                            <legend>Set the mode to use for sorting the legend e</legend>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="sort" id="sort_legend" value="legend"
+                                           ng-model="queryCtrl.query.sort">
+                                    legend: alphabetically based on the label used in the legend. This is the default.
+                                </label>
+                                <label>
+                                    <input type="radio" name="sort" id="sort_min" value="min"
+                                           ng-model="queryCtrl.query.sort">
+                                    min: using the minimum value shown the legend stats.
+                                </label>
+                                <label>
+                                    <input type="radio" name="sort" id="sort_max" value="max"
+                                           ng-model="queryCtrl.query.sort">
+                                    max: using the maximum value shown the legend stats.,
+                                </label>
+                                <label>
+                                    <input type="radio" name="sort" id="sort_avg" value="avg"
+                                           ng-model="queryCtrl.query.sort">
+                                    avg: using the average value shown the legend stats.
+                                </label>
+                                <label>
+                                    <input type="radio" name="sort" id="sort_count" value="count"
+                                           ng-model="queryCtrl.query.sort">
+                                    count: using the count value shown the legend stats.
+                                </label>
+                                <label>
+                                    <input type="radio" name="sort" id="sort_total" value="total"
+                                           ng-model="queryCtrl.query.sort">
+                                    total: using the total value shown the legend stats.
+                                </label>
+                                <label>
+                                    <input type="radio" name="sort" id="sort_last" value="last"
+                                           ng-model="queryCtrl.query.sort">
+                                    last: using the last value shown the legend stats.
+                                </label>
+                            </div>
+
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Set the order ascending or descending for the sort</legend>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="order" id="order_asc" value="asc"
+                                           ng-model="queryCtrl.query.order">asc
+                                </label>
+                                <label>
+                                    <input type="radio" name="order" id="order_desc" value="desc"
+                                           ng-model="queryCtrl.query.order">desc
+                                </label>
+                            </div>
+
+                        </fieldset>
+
+                    </div>
+
+                </uib-tab>
+
+            </uib-tabset>
+
+            <hr>
+        </div>
+        <!-- end: Additional Parameters -->
+    </ng-form>
+    <!-- end: Editor Form -->
+</section>

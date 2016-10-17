@@ -1,0 +1,30 @@
+<!--
+@license Atlas Query Editor
+
+Copyright (C) 2016 Upwork.com
+
+This software may be modified and distributed under the terms
+of the MIT license.  See the LICENSE file for details.
+-->
+<section>
+    <!-- Connect Form -->
+    <div class="form-group has-feedback" ng-class="{ 'has-success': isHostValid(), 'has-error': !isHostValid()}">
+        <label class="control-label" for="host">Atlas Host url</label>
+
+        <input type="url" class="form-control" name="host" id="host" placeholder="http(s)://<host>:<port>/api/v1"
+               ng-model="connCtrl.host"
+               ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }"
+               uib-typeahead="url as url for url in connCtrl.urlList() | filter:$viewValue"
+               typeahead-show-hint="true"
+               typeahead-min-length="0"
+               typeahead-editable="true"
+               ng-required="true"
+               atlas-validate-connection/>
+
+
+        <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="isHostValid()"></span>
+        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="!isHostValid()"></span>
+
+    </div>
+    <!-- end: Connect Form -->
+</section>

@@ -1,0 +1,53 @@
+{
+  "author": {
+    "name": "Angelos Lenis",
+    "email": "angeloslenis@cloud.upwork.com"
+  },
+  "name": "atlas-query-editor",
+  "version": "1.0.0",
+  "homepage": "https://github.com/upwork/atlas-query-editor",
+  "title": "Atlas Query Editor",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/upwork/atlas-query-editor.git"
+  },
+  "dependencies": {
+    "body-parser": "=1.15.2",
+    "cookie-parser": "=1.4.3",
+    "express": "=4.14.0",
+    "express-http-proxy": "=0.10.0",
+    "http-proxy": "^1.15.1",
+    "lodash": "=4.15.0",
+    "request": "=2.75.0"
+  },
+  "devDependencies": {
+    "bower": "=1.7.9",
+    "grunt": "=1.0.1",
+    "grunt-angular-templates": "=1.1.0",
+    "grunt-cache-breaker": "=2.0.1",
+    "grunt-cli": "=1.2.0",
+    "grunt-connect-proxy": "=0.2.0",
+    "grunt-contrib-clean": "=1.0.0",
+    "grunt-contrib-concat": "=1.0.1",
+    "grunt-contrib-connect": "=1.0.2",
+    "grunt-contrib-copy": "=1.0.0",
+    "grunt-contrib-cssmin": "=1.0.2",
+    "grunt-contrib-jshint": "=1.0.0",
+    "grunt-contrib-less": "=1.4.0",
+    "grunt-contrib-nodeunit": "=1.0.0",
+    "grunt-contrib-uglify": "=2.0.0",
+    "grunt-contrib-watch": "=1.0.0",
+    "grunt-express-server": "=0.5.3",
+    "grunt-injector": "=1.0.1",
+    "grunt-ng-annotate": "=2.0.2",
+    "grunt-regex-replace": "=0.3.0",
+    "grunt-rev": "=0.1.0",
+    "grunt-usemin": "=3.1.1",
+    "grunt-wiredep": "=3.0.1",
+    "jit-grunt": "=0.10.0",
+    "jshint-stylish": "=2.2.1",
+    "serve-static": "=1.11.1",
+    "time-grunt": "=1.4.0"
+  }
+}

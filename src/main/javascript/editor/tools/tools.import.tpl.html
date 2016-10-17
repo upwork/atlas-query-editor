@@ -1,0 +1,34 @@
+<!--
+@license Atlas Query Editor
+
+Copyright (C) 2016 Upwork.com
+
+This software may be modified and distributed under the terms
+of the MIT license.  See the LICENSE file for details.
+-->
+<form name="urlForm" novalidate="novalidate" ng-submit="ctrl.import(urlForm)">
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title"><span>Import Query</span></h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="form-group" ng-class="{'has-error' : (urlForm.$submitted || urlForm.importUrl.$dirty) && urlForm.importUrl.$invalid}">
+            <label class="control-label" for="importUrl">URL</label>
+            <textarea id="importUrl" name="importUrl" class="form-control" rows="10"
+                      ng-model="ctrl.url"
+                      ng-required="true"></textarea>
+            <div role="alert"
+                 ng-if="(urlForm.$submitted || urlForm.importUrl.$dirty) && urlForm.importUrl.$invalid"
+                 ng-messages="urlForm.importUrl.$error">
+                <p ng-message="required" class="help-block">Please enter a value for this field.</p>
+            </div>
+
+            <p class="help-block">Paste here a valid Atlas Graph URL (e.g. http://host/api/v1/graph?q={some query})</p>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit"><i class="fa fa-download"></i> <span>Import</span></button>
+        <button class="btn btn-warning" type="button" ng-click="ctrl.cancel()"><i class="fa fa-close"></i> Cancel</button>
+    </div>
+</form>

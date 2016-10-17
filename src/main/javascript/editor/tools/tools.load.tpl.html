@@ -1,0 +1,60 @@
+<!--
+@license Atlas Query Editor
+
+Copyright (C) 2016 Upwork.com
+
+This software may be modified and distributed under the terms
+of the MIT license.  See the LICENSE file for details.
+-->
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Load Query</h3>
+</div>
+<div class="modal-body">
+
+    <div ng-if="!ctrl.queryList.length">
+        <p>There are no stored queries</p>
+    </div>
+
+    <div class="row" ng-if="ctrl.queryList.length">
+        <div class="col-md-3">
+            <fieldset>
+                <legend><span>Saved Queries</span></legend>
+                <div style="max-height:400px; overflow-y: auto">
+                    <div class="list-group radio">
+                        <div class="list-group-item " ng-repeat="query in ctrl.queryList"
+                             ng-class="{active: ctrl.selectedQuery.name === query.name}">
+                            <label>
+                                <input type="radio"
+                                       name="query"
+                                       ng-value="query"
+                                       ng-model="ctrl.selectedQuery"/>
+                                <span>{{query.name}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <img width="100%" alt="Timeseries Graph" ng-src="{{ctrl.imageUrl(ctrl.selectedQuery.data)}}"/>
+                <div class="caption">
+                    <h3>{{ctrl.selectedQuery.name}}</h3>
+                    <p>{{ctrl.selectedQuery.description}}</p>
+                    <p>
+                        <button class="btn btn-danger btn-sm" ng-click="ctrl.remove(ctrl.selectedQuery.name)">
+                            <i class="fa fa-remove"></i>
+                            <span>Remove</span>
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ctrl.load(ctrl.selectedQuery.data)"><i class="fa fa-folder-open"></i> Load</button>
+    <button class="btn btn-warning" type="button" ng-click="ctrl.cancel()"><i class="fa fa-close"></i> <span>Cancel</span></button>
+</div>
