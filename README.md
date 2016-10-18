@@ -1,6 +1,6 @@
 # Atlas Query Editor
   
-A frontend editor for creating and testing [Atlas](https://github.com/Netflix/atlas) Queries 
+A frontend editor for creating and testing [Netflix Atlas](https://github.com/Netflix/atlas) Queries 
 
 ## Installation
 
