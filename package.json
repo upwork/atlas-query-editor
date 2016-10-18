@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "homepage": "https://github.com/upwork/atlas-query-editor",
   "title": "Atlas Query Editor",
-  "license": "MIT",
+  "license": "Apache",
   "repository": {
     "type": "git",
     "url": "https://github.com/upwork/atlas-query-editor.git"
