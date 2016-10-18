@@ -31,9 +31,7 @@ http://127.0.0.1:3000
 
 ## License
 
-Copyright (c) 2016 Upwork Inc
-
-Copyright 2013-2014 oDesk Corporation. All Rights Reserved.
+Copyright (c) 2016 Upwork Inc. All Rights Reserved.
 
 Atlas Query Editor is licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
