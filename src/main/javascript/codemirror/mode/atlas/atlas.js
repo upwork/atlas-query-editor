@@ -43,22 +43,40 @@
         // 2. modeConfig.extraTags: []
         tagNames = mergeTagNames(tagNames, modeConfig.extraTags || []);
 
-        return CodeMirror.simpleMode(editorConfig, {
-            start: [
-                {
-                    regex: /,/,
-                    token: 'atom'
-                },
-                {
-                    regex: new RegExp(':(' + operations.join('|') + ')'),
-                    token: 'operator'
-                },
-                {
-                    regex: new RegExp(tagNames.join('|')),
-                    token: 'tag'
+        var states = {
+            operator: new RegExp('^:(' + operations.join('|') + ')$'),
+            tag: new RegExp('^(' + tagNames.join('|') + ')$')
+        };
+
+        return {
+            startState: function() {
+                return {};
+            },
+            token: function(stream, state) {
+                if (stream.peek() == ',') {
+                    stream.next();
+                    return 'atom';
                 }
-            ]
-        });
+                var s = nextWord(stream);
+                if (states.operator.test(s)) {
+                    return 'operator';
+                }
+                if (states.tag.test(s)) {
+                    return 'tag';
+                }
+                return null;
+            }
+        };
+
+        function nextWord(stream) {
+            var s = '';
+            var next = stream.peek();
+            while (next && next !== ',') {
+                s += stream.next();
+                next = stream.peek();
+            }
+            return s;
+        }
 
         function mergeTagNames(tagNames1, tagNames2) {
             var result = tagNames1.concat();
