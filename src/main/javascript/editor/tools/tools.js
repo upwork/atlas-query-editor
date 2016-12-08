@@ -51,7 +51,7 @@ angular.module('atlas.query.editor.tools', [
                 // Strip query from white space characters
                 queryParams.q = queryParams.q.replace(/\s/g, '');
 
-                var queryString = $httpParamSerializer(queryParams);
+                var queryString = $httpParamSerializer(queryParams); // Also encodes URI components
                 return data.host + '/graph?' + queryString;
             }
 
@@ -92,12 +92,14 @@ angular.module('atlas.query.editor.tools', [
                         function parseQuery(queryString) {
                             var queryObject = _.chain(queryString)
                                 .map(function(item) {
-                                    if (item) {
-                                        return item.split('=');
+                                    if (/^([^=]+)=([^=]+)$/.test(item)) {
+                                        var parts = item.split('=');
+                                        parts[1] = decodeURIComponent(parts[1]);
+                                        return parts;
                                     }
-                                })
-                                .compact()
-                                .fromPairs()
+                                }) // 'a=b' -> ['a', 'b']
+                                .compact() // Remove {0, null, false} values from array
+                                .fromPairs() // [['a', 1], ['b', 2]] -> { 'a': 1, 'b': 2 }
                                 .value();
                             if (queryString.w !== undefined) {
                                 queryString.w = (1 * queryString.w);
