@@ -77,6 +77,19 @@ limitations under the License.
             font-weight: bold;
             border-bottom: none;
         }
+
+        /* Autoresize CodeMirror Editor */
+        .CodeMirror {
+            height: auto;
+
+        }
+
+        .CodeMirror-scroll {
+            min-height: 300px;
+        }
+
+        /* end: Autoresize CodeMirror Editor */
+
     </style>
 </head>
 <body ng-controller="EditorController as editorCtrl">

@@ -146,7 +146,7 @@ angular.module('atlas.query.editor.query', [
                             showExtraOptions: false,
                             editor: {
                                 lineNumbers: true,
-                                viewportMargin: 20,
+                                viewportMargin: Infinity,
                                 theme: 'seti',
                                 mode: {
                                     'name': 'atlas',
@@ -252,7 +252,7 @@ angular.module('atlas.query.editor.query', [
                                 // If image, just set the url as img.src
                                 if (!format || format === 'png') {
                                     ctrl.result.format = 'png';
-                                    ctrl.result.data = atlasQueryService.graphUrl(ctrl.query);
+                                    ctrl.result.data = atlasQueryService.graphUrl(ctrl.query) + '&cachebuster' + (new Date()).getTime();
                                     return;
                                 }
                                 // else load data from atlas with an xhr call

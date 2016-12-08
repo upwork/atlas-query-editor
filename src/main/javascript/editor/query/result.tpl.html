@@ -13,6 +13,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <section ng-if="resultCtrl.view.isEnabled()">
+    <div class="btn-group">
+        <button type="button" class="btn btn-success" ng-click="resultCtrl.actions.fetchResult(resultCtrl.queryFormat)">
+            <i class="fa fa-refresh"></i>
+            <span>Refresh</span>
+        </button>
+    </div>
+
     <!-- Format Options -->
     <div class="btn-group pull-right">
 
