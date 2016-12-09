@@ -58,7 +58,7 @@ angular.module('atlas.query.editor.tools', [
             function openImport() {
                 var modalInstance = $uibModal.open({
                     animation: true,
-                    size: 'small',
+                    size: 'lg',
                     templateUrl: 'editor/tools/tools.import.tpl.html',
                     controllerAs: 'ctrl',
                     controller: function($uibModalInstance) {
@@ -122,7 +122,7 @@ angular.module('atlas.query.editor.tools', [
             function openExport(data) {
                 var modalInstance = $uibModal.open({
                     animation: true,
-                    size: 'small',
+                    size: 'lg',
                     templateUrl: 'editor/tools/tools.export.tpl.html',
                     controllerAs: 'ctrl',
                     controller: [
@@ -155,25 +155,15 @@ angular.module('atlas.query.editor.tools', [
             function openSave(data) {
                 var modalInstance = $uibModal.open({
                     animation: true,
+                    size: 'lg',
                     templateUrl: 'editor/tools/tools.save.tpl.html',
                     controllerAs: 'ctrl',
-                    resolve: {
-                        'legend': [
-                            'atlasQueryService',
-                            function(atlasQueryService) {
-                                return atlasQueryService.fetchGraph(data.query, 'stats.json')
-                                    .then(function(timeseries) {
-                                        return timeseries.legend.join('\n');
-                                    });
-                            }
-                        ]
-                    },
                     controller: [
-                        '$uibModalInstance', 'atlasQueryService', 'legend',
-                        function($uibModalInstance, atlasQueryService, legend) {
+                        '$uibModalInstance', 'atlasQueryService',
+                        function($uibModalInstance, atlasQueryService) {
                             var ctrl = this;
-                            ctrl.name = null;
-                            ctrl.description = legend;
+                            ctrl.name = defaultName(data.query.q);
+                            ctrl.description = '';
                             ctrl.data = data;
 
                             ctrl.canSave = function(formCtrl) {
@@ -193,6 +183,17 @@ angular.module('atlas.query.editor.tools', [
                             ctrl.cancel = function() {
                                 $uibModalInstance.dismiss('cancel');
                             };
+
+
+                            function defaultName(query) {
+                                // Find the first name
+                                var match = query.match(/^(.+,)?name,([^,]+),/m);
+                                if (match) {
+                                    // Second group is the 'name' value
+                                    return match[2];
+                                }
+                                return null;
+                            }
                         }
                     ]
                 });
@@ -203,7 +204,7 @@ angular.module('atlas.query.editor.tools', [
             function openLoad() {
                 var modalInstance = $uibModal.open({
                     animation: true,
-                    size: 'small',
+                    size: 'lg',
                     templateUrl: 'editor/tools/tools.load.tpl.html',
                     controllerAs: 'ctrl',
                     controller: function($uibModalInstance, atlasQueryService) {

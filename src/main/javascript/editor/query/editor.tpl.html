@@ -17,8 +17,23 @@ limitations under the License.
     <ng-form name="queryForm">
 
         <div class="form-group">
-            <label for="query">Query</label>
-            <textarea class="form-control" query="script" id="query" autofocus="autofocus"
+            <div class="clearfix">
+                <label for="query">Query</label>
+                <div class="btn-toolbar pull-right">
+                    <label class="btn btn-default btn-sm" ng-class="{active: queryCtrl.view.editor.theme === 'seti-autoresize'}">
+                        <input id="theme" type="checkbox" class="sr-only"
+                               ng-model="queryCtrl.view.editor.theme"
+                               ng-true-value="'seti-autoresize'"
+                               ng-false-value="'seti'">
+                        </input>
+
+                        <i class="fa fa-arrows-v"></i>
+                        <span>Fit to content</span>
+                    </label>
+                </div>
+            </div>
+            <div class=""></div>
+            <textarea class="form-control autoresize" query="script" id="query" autofocus="autofocus"
                       ui-codemirror="queryCtrl.view.editor"
                       ng-model="queryCtrl.query.q"
                       ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }"></textarea>

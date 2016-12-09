@@ -46,14 +46,28 @@ limitations under the License.
             <div class="thumbnail">
                 <img width="100%" alt="Timeseries Graph" ng-src="{{ctrl.imageUrl(ctrl.selectedQuery.data)}}"/>
                 <div class="caption">
-                    <h3>{{ctrl.selectedQuery.name}}</h3>
-                    <p>{{ctrl.selectedQuery.description}}</p>
-                    <p>
-                        <button class="btn btn-danger btn-sm" ng-click="ctrl.remove(ctrl.selectedQuery.name)">
-                            <i class="fa fa-remove"></i>
-                            <span>Remove</span>
-                        </button>
-                    </p>
+                    <h3>
+                        <span>{{ctrl.selectedQuery.name}}</span>
+                        <div class="btn-toolbar pull-right">
+                            <button class="btn btn-danger btn-sm" ng-click="ctrl.remove(ctrl.selectedQuery.name)">
+                                <i class="fa fa-remove"></i>
+                                <span>Remove</span>
+                            </button>
+                        </div>
+                    </h3>
+                    <dl>
+                        <dt>Query</dt>
+                        <dd>
+                            <textarea type="text" name="queryString" id="queryString" class="form-control"
+                                      rows="3"
+                                      ng-model="ctrl.selectedQuery.data.query.q"
+                                      readonly="readonly"></textarea>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>Description</dt>
+                        <dd>{{ctrl.selectedQuery.description}}</dd>
+                    </dl>
                 </div>
             </div>
         </div>
