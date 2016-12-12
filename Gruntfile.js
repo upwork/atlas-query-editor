@@ -283,20 +283,6 @@ module.exports = function(grunt) {
             }
         },
 
-        /**************************
-         ** GitHub Pages targets **
-         **************************/
-        buildGhPages: {
-            ghPages: {},
-            production: {
-                options: {
-                    build_branch: 'gh-pages',
-                    dist: 'target/dist',
-                    pull: true
-                }
-            }
-        },
-
         /********************
          ** Server targets **
          ********************/
@@ -367,11 +353,6 @@ module.exports = function(grunt) {
         'injector:dist_scripts',
         //Rename files
         'cachebreaker'
-    ]);
-
-    grunt.registerTask('ghPagesDeploy', [
-        'dist',
-        'buildGhPages'
     ]);
 
     grunt.registerTask('serve', function(target) {

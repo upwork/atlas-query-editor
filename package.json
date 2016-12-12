@@ -25,7 +25,6 @@
     "bower": "=1.7.9",
     "grunt": "=1.0.1",
     "grunt-angular-templates": "=1.1.0",
-    "grunt-build-gh-pages": "=1.0.5",
     "grunt-cache-breaker": "=2.0.1",
     "grunt-cli": "=1.2.0",
     "grunt-connect-proxy": "=0.2.0",
