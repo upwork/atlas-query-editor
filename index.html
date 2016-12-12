@@ -1,0 +1,295 @@
+<!--
+@license Atlas Query Editor
+
+Copyright (C) 2016 Upwork.com
+
+This file is licensed under the Apache license, Version 2.0 (the "License").
+See the LICENSE file for details.
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en" ng-app="atlas.query.editor">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="-1"/>
+    <meta http-equiv="CACHE-CONTROL" content="NO-CACHE"/>
+
+    <base href="/"/>
+
+    <title>Atlas Query Editor</title>
+
+    <!-- Vendor CSS -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="vendor/jquery-ui/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="vendor/codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="vendor/codemirror/addon/hint/show-hint.css" />
+    <link rel="stylesheet" href="vendor/codemirror/theme/seti.css" />
+    <link rel="stylesheet" href="vendor/angular-loading-bar/build/loading-bar.css" />
+    <!-- endbower -->
+    <!-- /.Vendor CSS -->
+
+    <!-- Status CSS -->
+    <!-- injector:css -->
+    <!-- endinjector -->
+    <!-- /.Status CSS -->
+
+    <!-- Vendor JS -->
+    <!-- bower:js -->
+    <script src="vendor/jquery/dist/jquery.js"></script>
+    <script src="vendor/jquery-ui/jquery-ui.js"></script>
+    <script src="vendor/lodash/lodash.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="vendor/clipboard/dist/clipboard.js"></script>
+    <script src="vendor/angular/angular.js"></script>
+    <script src="vendor/ngclipboard/dist/ngclipboard.js"></script>
+    <script src="vendor/codemirror/lib/codemirror.js"></script>
+    <script src="vendor/codemirror/addon/mode/simple.js"></script>
+    <script src="vendor/codemirror/addon/hint/show-hint.js"></script>
+    <script src="vendor/angular-route/angular-route.js"></script>
+    <script src="vendor/angular-animate/angular-animate.js"></script>
+    <script src="vendor/angular-sanitize/angular-sanitize.js"></script>
+    <script src="vendor/angular-messages/angular-messages.js"></script>
+    <script src="vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="vendor/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="vendor/angular-ui-codemirror/ui-codemirror.js"></script>
+    <!-- endbower -->
+    <!-- /.Vendor JS -->
+
+    <!-- Status JS -->
+    <!-- injector:js -->
+    <script src="codemirror/mode/atlas/atlas.js"></script>
+    <script src="editor/editor.js?rel=d391d4b3fc"></script>
+    <!-- endinjector -->
+    <!-- /.Status JS -->
+
+
+    <style>
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            /* Margin bottom by footer height */
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            /* Set the fixed height of the footer here */
+            height: 60px;
+            background-color: #676767;
+        }
+
+        legend {
+            display: inline-block;
+            width: auto;
+            max-width: 100%;
+            margin-bottom: 5px;
+            font-size: inherit;
+            font-weight: bold;
+            border-bottom: none;
+        }
+
+        label.mandatory::after {
+            content: " *";
+        }
+
+        .thumbnail .caption .caption-title {
+            font-size: 1.1em;
+        }
+
+        /* CodeMirror Editor 'seti-autoresize' Theme  */
+
+        .cm-s-seti-autoresize.CodeMirror {
+            background-color: #151718 !important;
+            color: #CFD2D1 !important;
+            border: none;
+            height: auto;
+        }
+
+        .cm-s-seti-autoresize .CodeMirror-gutters {
+            color: #404b53;
+            background-color: #0E1112;
+            border: none;
+        }
+
+        .cm-s-seti-autoresize .CodeMirror-cursor {
+            border-left: solid thin #f8f8f0;
+        }
+
+        .cm-s-seti-autoresize .CodeMirror-linenumber {
+            color: #6D8A88;
+        }
+
+        .cm-s-seti-autoresize.CodeMirror-focused div.CodeMirror-selected {
+            background: rgba(255, 255, 255, 0.10);
+        }
+
+        .cm-s-seti-autoresize .CodeMirror-line::selection, .cm-s-seti-autoresize .CodeMirror-line > span::selection, .cm-s-seti-autoresize .CodeMirror-line > span > span::selection {
+            background: rgba(255, 255, 255, 0.10);
+        }
+
+        .cm-s-seti-autoresize .CodeMirror-line::-moz-selection, .cm-s-seti-autoresize .CodeMirror-line > span::-moz-selection, .cm-s-seti-autoresize .CodeMirror-line > span > span::-moz-selection {
+            background: rgba(255, 255, 255, 0.10);
+        }
+
+        .cm-s-seti-autoresize span.cm-comment {
+            color: #41535b;
+        }
+
+        .cm-s-seti-autoresize span.cm-string, .cm-s-seti-autoresize span.cm-string-2 {
+            color: #55b5db;
+        }
+
+        .cm-s-seti-autoresize span.cm-number {
+            color: #cd3f45;
+        }
+
+        .cm-s-seti-autoresize span.cm-variable {
+            color: #55b5db;
+        }
+
+        .cm-s-seti-autoresize span.cm-variable-2 {
+            color: #a074c4;
+        }
+
+        .cm-s-seti-autoresize span.cm-def {
+            color: #55b5db;
+        }
+
+        .cm-s-seti-autoresize span.cm-keyword {
+            color: #ff79c6;
+        }
+
+        .cm-s-seti-autoresize span.cm-operator {
+            color: #9fca56;
+        }
+
+        .cm-s-seti-autoresize span.cm-keyword {
+            color: #e6cd69;
+        }
+
+        .cm-s-seti-autoresize span.cm-atom {
+            color: #cd3f45;
+        }
+
+        .cm-s-seti-autoresize span.cm-meta {
+            color: #55b5db;
+        }
+
+        .cm-s-seti-autoresize span.cm-tag {
+            color: #55b5db;
+        }
+
+        .cm-s-seti-autoresize span.cm-attribute {
+            color: #9fca56;
+        }
+
+        .cm-s-seti-autoresize span.cm-qualifier {
+            color: #9fca56;
+        }
+
+        .cm-s-seti-autoresize span.cm-property {
+            color: #a074c4;
+        }
+
+        .cm-s-seti-autoresize span.cm-variable-3 {
+            color: #9fca56;
+        }
+
+        .cm-s-seti-autoresize span.cm-builtin {
+            color: #9fca56;
+        }
+
+        .cm-s-seti-autoresize .CodeMirror-activeline-background {
+            background: #101213;
+        }
+
+        .cm-s-seti-autoresize .CodeMirror-matchingbracket {
+            text-decoration: underline;
+            color: white !important;
+        }
+
+        /* end: CodeMirror Editor 'seti-autoresize' Theme */
+
+    </style>
+</head>
+<body ng-controller="EditorController as editorCtrl">
+
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-brand">Atlas Query Editor</span>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <div class="btn-toolbar pull-right" role="toolbar">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default navbar-btn"
+                            ng-click="editorCtrl.openSave()"
+                            ng-disabled="!editorCtrl.canOpenSave()">
+                        <i class="fa fa-save"></i>
+                        <span>Save</span>
+                    </button>
+                    <button type="button" class="btn btn-default navbar-btn"
+                            ng-click="editorCtrl.openLoad()">
+                        <i class="fa fa-folder-open"></i>
+                        <span>Load</span>
+                    </button>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default navbar-btn"
+                            ng-click="editorCtrl.openExport()"
+                            ng-disabled="!editorCtrl.canOpenExport()">
+                        <i class="fa fa-upload"></i>
+                        <span>Export</span>
+                    </button>
+                    <button type="button" class="btn btn-default navbar-btn"
+                            ng-click="editorCtrl.openImport()">
+                        <i class="fa fa-download"></i>
+                        <span>Import</span>
+                    </button>
+                </div>
+            </div>
+        </div><!--/.navbar-collapse -->
+    </div>
+</nav>
+
+<div class="container">
+    <form name="atlasQueryForm" autocomplete="off">
+        <atlas-connect host="editorCtrl.data.host"></atlas-connect>
+        <atlas-query-editor query="editorCtrl.data.query"></atlas-query-editor>
+    </form>
+
+    <atlas-query-result query="editorCtrl.data.query"></atlas-query-result>
+</div>
+
+<hr/>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">Copyright 2016 Upwork.com</p>
+    </div>
+</footer>
+
+</body>
+</html>
