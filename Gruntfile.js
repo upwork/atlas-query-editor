@@ -122,14 +122,6 @@ module.exports = function(grunt) {
                 src: './target/build/index.html',
                 cwd: '.',
                 ignorePath: '../../src/main/javascript/', // This is to create the proper path in the html file
-                fileTypes: {
-                    html: {
-                        replace: {
-                            js: '<script src="./{{filePath}}"></script>',
-                            css: '<link rel="stylesheet" href="./{{filePath}}" />'
-                        }
-                    }
-                },
                 exclude: [
                     /angular-mocks.js/
                 ],
@@ -175,7 +167,7 @@ module.exports = function(grunt) {
                     transform: function(filePath) {
                         filePath = filePath.replace('./', '');
                         filePath = filePath.replace('target/build/', '');
-                        return '<script src="./' + filePath + '"></script>';
+                        return '<script src="' + filePath + '"></script>';
                     },
                     starttag: '<!-- injector:js -->',
                     endtag: '<!-- endinjector -->'
@@ -196,7 +188,7 @@ module.exports = function(grunt) {
                     transform: function(filePath) {
                         filePath = filePath.replace('./', '');
                         filePath = filePath.replace('target/dist/', '');
-                        return '<script src="./' + filePath + '"></script>';
+                        return '<script src="' + filePath + '"></script>';
                     },
                     starttag: '<!-- injector:js -->',
                     endtag: '<!-- endinjector -->'
