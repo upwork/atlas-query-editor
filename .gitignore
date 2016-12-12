@@ -1,0 +1,6 @@
+.idea
+node/
+node_modules/
+etc/
+target/
+src/main/javascript/vendor/
