@@ -22,14 +22,14 @@ limitations under the License.
     </div>
 
     <div class="row" ng-if="ctrl.queryList.length">
-        <div class="col-md-3">
+        <div class="col-md-5">
             <fieldset>
                 <legend><span>Saved Queries</span></legend>
                 <div style="max-height:400px; overflow-y: auto">
                     <div class="list-group radio">
                         <div class="list-group-item " ng-repeat="query in ctrl.queryList"
                              ng-class="{active: ctrl.selectedQuery.name === query.name}">
-                            <label>
+                            <label style="word-break: break-all">
                                 <input type="radio"
                                        name="query"
                                        ng-value="query"
@@ -42,11 +42,11 @@ limitations under the License.
             </fieldset>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-7">
             <div class="thumbnail">
                 <img width="100%" alt="Timeseries Graph" ng-src="{{ctrl.imageUrl(ctrl.selectedQuery.data)}}"/>
                 <div class="caption">
-                    <h3>
+                    <h3 class="caption-title" style="word-break: break-all">
                         <span>{{ctrl.selectedQuery.name}}</span>
                         <div class="btn-toolbar pull-right">
                             <button class="btn btn-danger btn-sm" ng-click="ctrl.remove(ctrl.selectedQuery.name)">
@@ -57,7 +57,7 @@ limitations under the License.
                     </h3>
                     <dl>
                         <dt>Query</dt>
-                        <dd>
+                        <dd style="word-break: break-all">
                             <textarea type="text" name="queryString" id="queryString" class="form-control"
                                       rows="3"
                                       ng-model="ctrl.selectedQuery.data.query.q"
@@ -66,7 +66,7 @@ limitations under the License.
                     </dl>
                     <dl>
                         <dt>Description</dt>
-                        <dd>{{ctrl.selectedQuery.description}}</dd>
+                        <dd style="word-break: break-all">{{ctrl.selectedQuery.description}}</dd>
                     </dl>
                 </div>
             </div>

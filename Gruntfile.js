@@ -198,7 +198,7 @@ module.exports = function(grunt) {
                         [
                             // Order matters
                             './target/dist/codemirror/**/*.js',
-                            './target/dist/editor/status.js'
+                            './target/dist/editor/**/*.js'
                         ]
                     ]
                 }
@@ -283,6 +283,20 @@ module.exports = function(grunt) {
             }
         },
 
+        /**************************
+         ** GitHub Pages targets **
+         **************************/
+        buildGhPages: {
+            ghPages: {},
+            production: {
+                options: {
+                    build_branch: 'gh-pages',
+                    dist: 'target/dist',
+                    pull: true
+                }
+            }
+        },
+
         /********************
          ** Server targets **
          ********************/
@@ -349,12 +363,15 @@ module.exports = function(grunt) {
         'ngAnnotate',
         'concat',
         'uglify',
-        'cssmin',
         // Inject the minified files in index.html
         'injector:dist_scripts',
-        'injector:dist_css',
         //Rename files
         'cachebreaker'
+    ]);
+
+    grunt.registerTask('ghPagesDeploy', [
+        'dist',
+        'buildGhPages'
     ]);
 
     grunt.registerTask('serve', function(target) {
