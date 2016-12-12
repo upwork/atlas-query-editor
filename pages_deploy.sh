@@ -16,6 +16,8 @@ function doCompile {
 # Save some useful information
 REPO=`git config remote.origin.url`
 SHA=`git rev-parse --verify HEAD`
+USER_NAME=`git config user.name`
+USER_EMAIL=`git config user.email`
 
 # Clone the existing gh-pages for this repo into target/pages/
 # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
@@ -38,16 +40,10 @@ cp -r $SOURCE_FOLDER/* $TARGET_FOLDER/
 cd $TARGET_FOLDER
 
 # Commit the "changes", i.e. the new version.
-
-# If there are no changes to the compiled out (e.g. this is a README update) then just bail.
-if [ -z `git diff --exit-code` ]; then
-    echo "No changes to the output on this push; exiting."
-    exit 0
-fi
-
-# The delta will show diffs between new and old versions.
+git config user.name "$USER_NAME"
+git config user.email "$USER_EMAIL"
 git add .
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 
 # Now that we're all set up, we can push.
-git push $TARGET_BRANCH
+git push origin $TARGET_BRANCH
