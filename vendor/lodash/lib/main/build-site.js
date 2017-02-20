@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const cheerio = require('cheerio');
 const fs = require('fs');
 const marky = require('marky-markdown');
 const path = require('path');
@@ -27,6 +28,8 @@ const highlights = {
     'type'
   ]
 };
+
+const exts = _.keys(highlights);
 
 /**
  * Converts Lodash method references into documentation links.
@@ -117,7 +120,8 @@ function tidyHighlights($) {
   $('.highlight').each(function() {
     let $spans;
     const $parent = $(this);
-    const ext = $parent.find('.source,.text').first().attr('class').split(' ').pop();
+    const classes = $parent.find('.source,.text').first().attr('class').split(' ');
+    const ext = _(classes).intersection(exts).last();
 
     $parent.addClass(ext);
 
@@ -132,7 +136,7 @@ function tidyHighlights($) {
     $parent.find('[class]').each(function() {
       const $element = $(this);
       const classes = $element.attr('class').split(' ');
-      const attr = _.intersection(classes, highlights[ext]).join(' ');
+      const attr = _(classes).intersection(highlights[ext]).join(' ');
       $element.attr('class', attr || null);
     });
     // Collapse nested comment highlights.
@@ -171,9 +175,17 @@ function build() {
     // Load markdown.
     .readFileSync(readmePath, 'utf8')
     // Uncomment docdown HTML hints.
-    .replace(/(<)!--\s*|\s*--(>)/g, '$1$2');
+    .replace(/(<)!--\s*|\s*--(>)/g, '$1$2')
+    // Convert source and npm package links to anchors.
+    .replace(/\[source\]\(([^)]+)\) \[npm package\]\(([^)]+)\)/g, (match, href1, href2) =>
+      `<p><a href="${ href1 }">source</a> <a href="${ href2 }">npm package</a></p>`
+    );
 
-  const $ = marky(markdown, { 'sanitize': false });
+  const $ = cheerio.load(marky(markdown, {
+    'enableHeadingLinkIcons': false,
+    'sanitize': false
+  }));
+
   const $header = $('h1').first().remove();
   const version = $header.find('span').first().text().trim().slice(1);
 
