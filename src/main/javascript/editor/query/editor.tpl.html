@@ -92,10 +92,29 @@ limitations under the License.
                             <label for="endTime">End Time</label>
                             <input type="text" class="form-control" id="endTime" ng-model="queryCtrl.query.e"/>
                         </div>
+
                     </div>
                 </uib-tab>
 
                 <uib-tab index="1">
+                    <uib-tab-heading>
+                        <span>Data</span>
+                    </uib-tab-heading>
+
+                    <div>
+                        <p class="help-block text-right">
+                            <a class="label label-default" href="https://github.com/Netflix/atlas/wiki/Graph#data" target="_blank"> <i class="fa fa-question-circle"></i> <span>Help</span></a>
+                        </p>
+
+                        <div class="form-group">
+                            <label for="step">Step</label>
+                            <input type="text" class="form-control" id="step" ng-model="queryCtrl.query.step" null-if-empty/>
+                            <span class="help-block"><i class="fa fa-warning"></i> In most cases users should not set step directly. The step parameter is deprecated.</span>
+                        </div>
+                    </div>
+                </uib-tab>
+
+                <uib-tab index="2">
                     <uib-tab-heading>
                         <span>Image Flags</span>
                     </uib-tab-heading>
@@ -162,7 +181,7 @@ limitations under the License.
                 </uib-tab>
 
 
-                <uib-tab index="2">
+                <uib-tab index="3">
                     <uib-tab-heading>
                         <span>Image Size</span>
                     </uib-tab-heading>
@@ -222,7 +241,7 @@ limitations under the License.
                 </uib-tab>
 
 
-                <uib-tab index="3">
+                <uib-tab index="4">
                     <uib-tab-heading>
                         <span>Text Flags</span>
                     </uib-tab-heading>

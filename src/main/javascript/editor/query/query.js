@@ -92,6 +92,7 @@ angular.module('atlas.query.editor.query', [
 
             var defaultQuery = {
                 q: '',
+                step: null,
                 // (1) Time
                 s: 'e-3h', // Start time e-3h* Time
                 e: 'now', //End time now* Time
@@ -408,4 +409,16 @@ angular.module('atlas.query.editor.query', [
                 return service;
             }
         ];
-    });
+    })
+
+    .directive('nullIfEmpty', [function() {
+            return {
+                require: 'ngModel',
+                link: function(scope, elm, attr, ngModelCtrl) {
+                    ngModelCtrl.$parsers.unshift(function(value) {
+                        return value === '' ? null : value;
+                    });
+                }
+            };
+        }]
+    );

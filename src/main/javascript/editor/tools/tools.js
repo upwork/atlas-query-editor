@@ -42,11 +42,11 @@ angular.module('atlas.query.editor.tools', [
                 var queryParams = _.pick(data.query, ['q']);
                 if (options.time) {
                     // Add time parameters
-                    _.extend(queryParams, _.pick(data.query, ['s', 'e', 'tz']));
+                    _.extend(queryParams, _.pick(data.query, ['s', 'e', 'tz', 'step']));
                 }
                 if (options.image) {
                     // Add all the rest
-                    _.extend(queryParams, _.omit(data.query, ['q', 's', 'e', 'tz']));
+                    _.extend(queryParams, _.omit(data.query, ['q', 's', 'e', 'tz', 'step']));
                 }
                 // Strip query from white space characters
                 queryParams.q = queryParams.q.replace(/\s/g, '');
