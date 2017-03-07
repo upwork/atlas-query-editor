@@ -181,8 +181,11 @@ angular.module('atlas.query.editor.query', [
                         $scope.$watch(function() {
                             return ctrl.query;
                         }, function() {
-                            // Add also default options when query changes
-                            angular.extend(ctrl.query, angular.extend(angular.copy(defaultQuery), ctrl.query));
+                            $timeout(function() {
+                                // Add also default options when query changes
+                                var queryWithDefaults = angular.extend(angular.copy(defaultQuery), ctrl.query);
+                                angular.extend(ctrl.query, queryWithDefaults);
+                            }, 0);
                         }, true);
 
                         // Add default options to query
