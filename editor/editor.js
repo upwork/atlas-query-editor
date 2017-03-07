@@ -90,9 +90,9 @@ g.view={readOnly:function(){return!e.isActive()},showExtraOptions:!1,editor:{lin
 // View Actions
 g.actions={format:function(){h.execCommand('atlasFormat')}},
 // Watchers
-a.$watch(function(){return e.baseUrl()},function(){f()}),a.$watch(function(){return g.query},function(){
+a.$watch(function(){return e.baseUrl()},function(){f()}),a.$watch(function(){return g.query},function(){d(function(){
 // Add also default options when query changes
-angular.extend(g.query,angular.extend(angular.copy(b),g.query))},!0)}]}}]).directive('atlasQueryResult',[function(){return{restrict:'E',templateUrl:'editor/query/result.tpl.html',controllerAs:'resultCtrl',scope:{query:'='},bindToController:!0,controller:['$scope','atlasQueryService',function(a,b){var c=this;
+var a=angular.extend(angular.copy(b),g.query);angular.extend(g.query,a)},0)},!0)}]}}]).directive('atlasQueryResult',[function(){return{restrict:'E',templateUrl:'editor/query/result.tpl.html',controllerAs:'resultCtrl',scope:{query:'='},bindToController:!0,controller:['$scope','atlasQueryService',function(a,b){var c=this;
 // This is extra option, used only for the result
 c.queryFormat='png',// png|csv|txt|json|std.json|stats.json
 // The results
