@@ -35,12 +35,20 @@ angular.module('atlas.query.editor', [
 // EditorController
 // -----------------------------------
     .controller('EditorController', [
-        '$scope', '$location', 'atlasQueryToolsService',
-        function($scope, $location, atlasQueryToolsService) {
+        '$scope', '$location', 'atlasQueryToolsService', 'atlasQueryService',
+        function($scope, $location, atlasQueryToolsService, atlasQueryService) {
             var ctrl = this;
 
             // Read search parameters to initialize
-            ctrl.data = fromLocation($location.search());
+            ctrl.data = angular.extend({
+                format: 'png',
+                host: null,
+                query: null
+            }, fromLocation($location.search()));
+            ctrl.result = {
+                format: null,
+                data: null
+            };
 
             // Save / Load
             ctrl.openSave = function() {
@@ -53,6 +61,8 @@ angular.module('atlas.query.editor', [
             ctrl.openLoad = function() {
                 atlasQueryToolsService.openLoad()
                     .then(function(newData) {
+                        ctrl.result.format = null;
+                        ctrl.result.data = null;
                         angular.extend(ctrl.data, newData);
                     });
             };
@@ -61,6 +71,8 @@ angular.module('atlas.query.editor', [
             ctrl.openImport = function() {
                 atlasQueryToolsService.openImport()
                     .then(function(newData) {
+                        ctrl.result.format = null;
+                        ctrl.result.data = null;
                         angular.extend(ctrl.data, newData);
                     });
             };
@@ -75,9 +87,32 @@ angular.module('atlas.query.editor', [
                 return ctrl.data.host && ctrl.data.query.q;
             };
 
+            // View Actions
+            ctrl.isResultVisible = function() {
+                return atlasQueryService.isActive() && ctrl.result.data;
+            };
+
+            ctrl.fetchResult = function(ngFormCtrl) {
+                if (ngFormCtrl.$invalid) {
+                    return;
+                }
+                // If image, just set the url as img.src
+                if (ctrl.data.format === 'png') {
+                    ctrl.result.format = ctrl.data.format;
+                    ctrl.result.data = atlasQueryService.graphUrl(ctrl.data.query) + '&cachebuster' + (new Date()).getTime();
+                    return;
+                }
+                // else load data from atlas with an xhr call
+                return atlasQueryService.fetchGraph(ctrl.data.query, ctrl.data.format)
+                    .then(function(graphData) {
+                        ctrl.result.format = ctrl.data.format;
+                        ctrl.result.data = graphData;
+                    });
+            };
+
             // Watch query and location and sync between them
             $scope.$on('$locationChangeSuccess', function() {
-                ctrl.data = fromLocation($location.search());
+                angular.extend(ctrl.data, fromLocation($location.search()));
             });
 
             $scope.$watch(function() {
@@ -85,6 +120,15 @@ angular.module('atlas.query.editor', [
             }, function(newData) {
                 $location.search(toLocation(newData));
             }, true);
+
+            $scope.$watch(function() {
+                return ctrl.isResultVisible();
+            }, function(isResultVisible) {
+                if (!isResultVisible) {
+                    ctrl.result.format = null;
+                    ctrl.result.data = null;
+                }
+            });
 
             // -------------------------
             // Transformation Functions:

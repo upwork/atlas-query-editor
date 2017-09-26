@@ -12,74 +12,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<section ng-if="resultCtrl.view.isEnabled()">
-    <div class="btn-group">
-        <button type="button" class="btn btn-success" ng-click="resultCtrl.actions.fetchResult(resultCtrl.queryFormat)">
-            <i class="fa fa-refresh"></i>
-            <span>Refresh</span>
-        </button>
-    </div>
-
-    <!-- Format Options -->
-    <div class="btn-group pull-right">
-
-        <label class="btn btn-default" ng-class="{active: resultCtrl.queryFormat === 'png'}">
-            <input id="format_png" type="radio" class="sr-only"
-                   ng-model="resultCtrl.queryFormat"
-                   value="png"
-                   ng-change="resultCtrl.actions.fetchResult(resultCtrl.queryFormat)">
-            </input>
-            <span>PNG Image</span>
-        </label>
-        <label class="btn btn-default" ng-class="{active: resultCtrl.queryFormat === 'std.json'}">
-            <input id="format_std.json" type="radio" class="sr-only"
-                   ng-model="resultCtrl.queryFormat"
-                   value="std.json"
-                   ng-change="resultCtrl.actions.fetchResult(resultCtrl.queryFormat)">
-            </input>
-            <span>Json</span>
-        </label>
-        <label class="btn btn-default" ng-class="{active: resultCtrl.queryFormat === 'stats.json'}">
-            <input id="format_stats.json" type="radio" class="sr-only"
-                   ng-model="resultCtrl.queryFormat"
-                   value="stats.json"
-                   ng-change="resultCtrl.actions.fetchResult(resultCtrl.queryFormat)">
-            </input>
-            <span>Stats Json</span>
-        </label>
-        <label class="btn btn-default" ng-class="{active: resultCtrl.queryFormat === 'csv'}">
-            <input id="format_csv" type="radio" class="sr-only"
-                   ng-model="resultCtrl.queryFormat"
-                   value="csv"
-                   ng-change="resultCtrl.actions.fetchResult(resultCtrl.queryFormat)">
-            </input>
-            <span>CSV</span>
-        </label>
-        <label class="btn btn-default" ng-class="{active: resultCtrl.queryFormat === 'txt'}">
-            <input id="format_txt" type="radio" class="sr-only"
-                   ng-model="resultCtrl.queryFormat"
-                   value="txt"
-                   ng-change="resultCtrl.actions.fetchResult(resultCtrl.queryFormat)">
-            </input>
-            <span>TXT</span>
-        </label>
-    </div>
-    <!-- end: Format Options -->
-
-    <div class="clearfix"></div>
-
+<section>
     <!-- Result -->
-    <div ng-switch="resultCtrl.result.format">
-        <textarea rows="30" ng-switch-when="json" class="form-control" readonly="readonly">{{resultCtrl.result.data | json}}</textarea>
-        <textarea rows="30" ng-switch-when="std.json" class="form-control" readonly="readonly">{{resultCtrl.result.data | json}}</textarea>
-        <textarea rows="30" ng-switch-when="stats.json" class="form-control" readonly="readonly">{{resultCtrl.result.data | json}}</textarea>
-        <textarea rows="30" ng-switch-when="txt" class="form-control" readonly="readonly">{{resultCtrl.result.data}}</textarea>
-        <textarea rows="30" ng-switch-when="csv" class="form-control" readonly="readonly">{{resultCtrl.result.data}}</textarea>
-        <img width="100%" alt="Timeseries Graph"
-             ng-switch-default
-             ng-src="{{resultCtrl.result.data}}"/>
+    <div ng-switch="result.format">
+        <textarea rows="30" ng-switch-when="json" class="form-control" readonly="readonly">{{result.data | json}}</textarea>
+        <textarea rows="30" ng-switch-when="std.json" class="form-control" readonly="readonly">{{result.data | json}}</textarea>
+        <textarea rows="30" ng-switch-when="stats.json" class="form-control" readonly="readonly">{{result.data | json}}</textarea>
+        <textarea rows="30" ng-switch-when="txt" class="form-control" readonly="readonly">{{result.data}}</textarea>
+        <textarea rows="30" ng-switch-when="csv" class="form-control" readonly="readonly">{{result.data}}</textarea>
+        <img width="100%" ng-switch-default ng-src="{{result.data}}"/>
     </div>
     <!-- end:Result -->
-    <!-- Result -->
-
 </section>

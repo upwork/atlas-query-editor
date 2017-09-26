@@ -31,6 +31,7 @@ angular.module('atlas.query.editor.query', [
             return {
                 restrict: 'E',
                 require: '^form',
+                replace: true,
                 templateUrl: 'editor/query/connect.tpl.html',
                 scope: {
                     host: '='
@@ -127,6 +128,7 @@ angular.module('atlas.query.editor.query', [
             return {
                 restrict: 'E',
                 require: '^form',
+                replace: true,
                 templateUrl: 'editor/query/editor.tpl.html',
                 controllerAs: 'queryCtrl',
                 scope: {
@@ -223,64 +225,11 @@ angular.module('atlas.query.editor.query', [
         function() {
             return {
                 restrict: 'E',
+                replace: true,
                 templateUrl: 'editor/query/result.tpl.html',
-                controllerAs: 'resultCtrl',
                 scope: {
-                    query: '='
-                },
-                bindToController: true,
-                controller: [
-                    '$scope', 'atlasQueryService',
-                    function($scope, atlasQueryService) {
-                        var ctrl = this;
-
-                        // This is extra option, used only for the result
-                        ctrl.queryFormat = 'png'; // png|csv|txt|json|std.json|stats.json
-
-                        // The results
-                        ctrl.result = {
-                            format: null,
-                            data: null
-                        };
-
-                        ctrl.view = {
-                            isEnabled: function() {
-                                return atlasQueryService.isActive() && !!ctrl.query.q;
-                            }
-                        };
-
-                        // View Actions
-                        ctrl.actions = {
-
-                            fetchResult: function(format) {
-                                // If image, just set the url as img.src
-                                if (!format || format === 'png') {
-                                    ctrl.result.format = 'png';
-                                    ctrl.result.data = atlasQueryService.graphUrl(ctrl.query) + '&cachebuster' + (new Date()).getTime();
-                                    return;
-                                }
-                                // else load data from atlas with an xhr call
-                                return atlasQueryService.fetchGraph(ctrl.query, format)
-                                    .then(function(graphData) {
-                                        ctrl.result.format = format;
-                                        ctrl.result.data = graphData;
-                                    });
-                            }
-                        };
-
-                        // Watcher
-                        $scope.$watch(function() {
-                            return ctrl.query;
-                        }, function() {
-                            ctrl.actions.fetchResult(ctrl.queryFormat);
-                        }, true);
-                        $scope.$watch(function() {
-                            return ctrl.view.isEnabled();
-                        }, function() {
-                            ctrl.actions.fetchResult(ctrl.queryFormat);
-                        });
-                    }
-                ]
+                    result: '='
+                }
             };
         }
     ])
