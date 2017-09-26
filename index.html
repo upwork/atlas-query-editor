@@ -67,7 +67,7 @@ limitations under the License.
     <!-- Status JS -->
     <!-- injector:js -->
     <script src="codemirror/mode/atlas/atlas.js"></script>
-    <script src="editor/editor.js?rel=19a727ee89"></script>
+    <script src="editor/editor.js?rel=539e837c49"></script>
     <!-- endinjector -->
     <!-- /.Status JS -->
 
@@ -273,12 +273,83 @@ limitations under the License.
 </nav>
 
 <div class="container">
-    <form name="atlasQueryForm" autocomplete="off">
+    <form name="atlasQueryForm" autocomplete="off" ng-submit="editorCtrl.fetchResult(atlasQueryForm)">
+        <!-- Form: Select Atlas Host -->
         <atlas-connect host="editorCtrl.data.host"></atlas-connect>
+        <!-- end: Select Atlas Host -->
+
+        <!-- Form: Edit Query -->
         <atlas-query-editor query="editorCtrl.data.query"></atlas-query-editor>
+        <!-- end: Edit Query -->
+
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Form: Format Options -->
+                <div class="form-group">
+                    <fieldset>
+                        <legend>Format</legend>
+                        <div class="btn-group">
+                            <label class="btn btn-default" ng-class="{active: editorCtrl.data.format === 'png'}">
+                                <input id="format_png" type="radio" class="sr-only"
+                                       ng-model="editorCtrl.data.format"
+                                       value="png">
+                                </input>
+                                <span>PNG Image</span>
+                            </label>
+                            <label class="btn btn-default" ng-class="{active: editorCtrl.data.format === 'std.json'}">
+                                <input id="format_std.json" type="radio" class="sr-only"
+                                       ng-model="editorCtrl.data.format"
+                                       ng-change=""
+                                       value="std.json">
+                                </input>
+                                <span>Json</span>
+                            </label>
+                            <label class="btn btn-default" ng-class="{active: editorCtrl.data.format === 'stats.json'}">
+                                <input id="format_stats.json" type="radio" class="sr-only"
+                                       ng-model="editorCtrl.data.format"
+                                       value="stats.json">
+                                </input>
+                                <span>Stats Json</span>
+                            </label>
+                            <label class="btn btn-default" ng-class="{active: editorCtrl.data.format === 'csv'}">
+                                <input id="format_csv" type="radio" class="sr-only"
+                                       ng-model="editorCtrl.data.format"
+                                       value="csv">
+                                </input>
+                                <span>CSV</span>
+                            </label>
+                            <label class="btn btn-default" ng-class="{active: editorCtrl.data.format === 'txt'}">
+                                <input id="format_txt" type="radio" class="sr-only"
+                                       ng-model="editorCtrl.data.format"
+                                       value="txt">
+                                </input>
+                                <span>TXT</span>
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
+                <!-- end: Format Options -->
+            </div>
+
+            <div class="col-md-6">
+                <!-- Form: Submit Button -->
+                <div class="form-group">
+                    <label class="control-label" role="presentation">&nbsp;</label>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-play"></i>
+                            <span>Run Query</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- end: Submit Button -->
+            </div>
+        </div>
     </form>
 
-    <atlas-query-result query="editorCtrl.data.query"></atlas-query-result>
+    <div ng-if="editorCtrl.isResultVisible()">
+        <atlas-query-result result="editorCtrl.result"></atlas-query-result>
+    </div>
 </div>
 
 <hr/>
