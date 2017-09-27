@@ -278,12 +278,31 @@ angular.module('atlas.query.editor.query', [
                             });
                     },
                     fetchGraph: function(query, format) {
-                        return $http.get(service.graphUrl(query, format))
-                            .then(function(response) {
-                                return response.data;
-                            }, function(errorResponse) {
-                                return errorResponse.data;
+                        if (format === 'png') {
+                            return $http.get(service.graphUrl(query, format), {
+                                responseType: 'arraybuffer'
+                            }).then(function(response) {
+                                var base64image = _arrayBufferToBase64(response.data);
+                                return 'data:image/png;base64,' + base64image;
                             });
+                        } else {
+                            return $http.get(service.graphUrl(query, format))
+                                .then(function(response) {
+                                    return response.data;
+                                }, function(errorResponse) {
+                                    return errorResponse.data;
+                                });
+                        }
+
+                        function _arrayBufferToBase64(buffer) {
+                            var binary = '';
+                            var bytes = new Uint8Array(buffer);
+                            var len = bytes.byteLength;
+                            for (var i = 0; i < len; i++) {
+                                binary += String.fromCharCode(bytes[i]);
+                            }
+                            return window.btoa(binary);
+                        }
                     },
                     checkConnection: function(atlasUrl) {
                         return $http.get(atlasUrl + '/tags')

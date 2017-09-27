@@ -88,6 +88,9 @@ angular.module('atlas.query.editor', [
             };
 
             // View Actions
+            ctrl.canSubmit = function() {
+                return atlasQueryService.isActive();
+            };
             ctrl.isResultVisible = function() {
                 return atlasQueryService.isActive() && ctrl.result.data;
             };
@@ -96,17 +99,11 @@ angular.module('atlas.query.editor', [
                 if (ngFormCtrl.$invalid) {
                     return;
                 }
-                // If image, just set the url as img.src
-                if (ctrl.data.format === 'png') {
-                    ctrl.result.format = ctrl.data.format;
-                    ctrl.result.data = atlasQueryService.graphUrl(ctrl.data.query) + '&cachebuster' + (new Date()).getTime();
-                    return;
-                }
-                // else load data from atlas with an xhr call
                 return atlasQueryService.fetchGraph(ctrl.data.query, ctrl.data.format)
                     .then(function(graphData) {
                         ctrl.result.format = ctrl.data.format;
                         ctrl.result.data = graphData;
+                        ngFormCtrl.$setPristine();
                     });
             };
 
