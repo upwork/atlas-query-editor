@@ -67,7 +67,7 @@ limitations under the License.
     <!-- Status JS -->
     <!-- injector:js -->
     <script src="codemirror/mode/atlas/atlas.js"></script>
-    <script src="editor/editor.js?rel=539e837c49"></script>
+    <script src="editor/editor.js?rel=26cd2a9544"></script>
     <!-- endinjector -->
     <!-- /.Status JS -->
 
@@ -336,9 +336,14 @@ limitations under the License.
                 <div class="form-group">
                     <label class="control-label" role="presentation">&nbsp;</label>
                     <div class="text-right">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fa fa-play"></i>
-                            <span>Run Query</span>
+                        <button type="submit" class="btn"
+                                ng-class="{
+                                    'btn-secondary' : editorCtrl.result.data !== null && atlasQueryForm.$pristine,
+                                    'btn-success' : editorCtrl.result.data == null || atlasQueryForm.$dirty
+                                }"
+                                ng-disabled="!editorCtrl.canSubmit()">
+                            <span ng-if="editorCtrl.result.data == null || atlasQueryForm.$dirty"><i class="fa fa-play"></i> Execute</span>
+                            <span ng-if="editorCtrl.result.data !== null && atlasQueryForm.$pristine"><i class="fa fa-refresh"></i> Refresh</span>
                         </button>
                     </div>
                 </div>
