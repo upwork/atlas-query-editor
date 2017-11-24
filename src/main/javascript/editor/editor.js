@@ -31,18 +31,44 @@ angular.module('atlas.query.editor', [
     'atlas.query.editor.tools'
 ])
 
-// -----------------------------------
-// EditorController
-// -----------------------------------
+    .config([
+        '$routeProvider',
+        function($routeProvider) {
+            // Default route
+            $routeProvider.otherwise({
+                redirectTo: '/'
+            });
+
+            $routeProvider.when('/', {
+                templateUrl: 'editor/editor.tpl.html',
+                controller: 'EditorController',
+                controllerAs: 'editorCtrl',
+                resolve: {
+                    config: [
+                        'atlasQueryService',
+                        function(atlasQueryService) {
+                            return atlasQueryService.fetchConfig();
+                        }
+                    ]
+                }
+            });
+        }
+    ])
+
+    // -----------------------------------
+    // EditorController
+    // -----------------------------------
     .controller('EditorController', [
-        '$scope', '$location', 'atlasQueryToolsService', 'atlasQueryService',
-        function($scope, $location, atlasQueryToolsService, atlasQueryService) {
+        '$scope', '$location', 'atlasQueryToolsService', 'atlasQueryService', 'config',
+        function($scope, $location, atlasQueryToolsService, atlasQueryService, config) {
             var ctrl = this;
+            var selectedHost = _.find(config.hosts, {'default': true}) || {url: null};
 
             // Read search parameters to initialize
             ctrl.data = angular.extend({
                 format: 'png',
-                host: null,
+                host: selectedHost.url,
+                hostList: config.hosts || [],
                 query: null
             }, fromLocation($location.search()));
             ctrl.result = {
@@ -90,6 +116,9 @@ angular.module('atlas.query.editor', [
             // View Actions
             ctrl.canSubmit = function() {
                 return atlasQueryService.isActive();
+            };
+            ctrl.isHostsEmpty = function() {
+                return _.isEmpty(ctrl.data.hostList);
             };
             ctrl.isResultVisible = function() {
                 return atlasQueryService.isActive() && ctrl.result.data;

@@ -46,6 +46,7 @@ module.exports = function(grunt) {
                             'vendor/**/*',
                             'codemirror/**/*',
                             'editor/**/*',
+                            "config/**/*",
                             'index.html',
                             '!**/*.spec.js',
                             '!**/*.mock.js',
@@ -67,6 +68,7 @@ module.exports = function(grunt) {
                             'vendor/**/*',
                             'codemirror/**/*',
                             'locale/**/*',
+                            "config/**/*",
                             'index.html'
                         ]
                     }

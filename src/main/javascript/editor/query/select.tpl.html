@@ -1,0 +1,34 @@
+<!--
+@license Atlas Query Editor
+
+Copyright (C) 2016 Upwork.com
+
+This file is licensed under the Apache license, Version 2.0 (the "License").
+See the LICENSE file for details.
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<section>
+    <!-- Connect Form -->
+    <div class="form-group has-feedback" ng-class="{ 'has-success': isHostValid(), 'has-error': !isHostValid()}">
+        <label class="control-label" for="host">Atlas Host url</label>
+
+        <select class="form-control" name="host" id="host"
+                ng-options="host.url as (host.name + ' (' + host.url + ')') for host in selectCtrl.hostList"
+                ng-model="selectCtrl.host"
+                ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 0, 'blur': 0 } }"
+                ng-required="true"
+                atlas-validate-connection>
+        </select>
+        <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="isHostValid()"></span>
+        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" ng-if="!isHostValid()"></span>
+
+        <span class="help-block">{{selectCtrl.getMessage(selectCtrl.host)}}</span>
+    </div>
+
+    <!-- end: Connect Form -->
+</section>

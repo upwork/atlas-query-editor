@@ -65,6 +65,49 @@ angular.module('atlas.query.editor.query', [
         }
     ])
 
+    .directive('atlasSelect', [
+        'atlasQueryService',
+        function(atlasQueryService) {
+            return {
+                restrict: 'E',
+                require: '^form',
+                replace: true,
+                templateUrl: 'editor/query/select.tpl.html',
+                scope: {
+                    host: '=',
+                    hostList: '='
+                },
+                controllerAs: 'selectCtrl',
+                bindToController: true,
+                controller: [
+                    function() {
+                        var ctrl = this;
+
+                        ctrl.getMessage = function(url) {
+                            var host = _.find(ctrl.hostList, {url: url});
+                            console.log('getMessage', host);
+                            return host ? host.message : null;
+                        }
+                    }
+                ],
+                link: function(scope, elm, atts, ngFormCtrl) {
+
+                    //Use for highlighting the field as red/green
+                    scope.isHostValid = function() {
+                        return ngFormCtrl.host.$valid;
+                    };
+
+                    // When input is valid, update the url in atlasQueryService
+                    scope.$watch(function() {
+                        return ngFormCtrl.host.$valid;
+                    }, function(isValid) {
+                        atlasQueryService.setBaseUrl(isValid ? scope.selectCtrl.host : null);
+                    });
+                }
+            };
+        }
+    ])
+
     .directive('atlasValidateConnection', [
         '$q', 'atlasQueryService',
         function($q, atlasQueryService) {
@@ -249,6 +292,15 @@ angular.module('atlas.query.editor.query', [
             function($window, $http, $q, $httpParamSerializer) {
 
                 var service = {
+                    fetchConfig: function() {
+                        return $http.get('/config/config.json')
+                            .then(function(response) {
+                                var hostMap = response.data;
+                                return hostMap;
+                            }, function(errorResponse) {
+                                return [];
+                            });
+                    },
                     isActive: function() {
                         return !!atlasUrl;
                     },

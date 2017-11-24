@@ -17,7 +17,7 @@ app.use(cookieParser());
  **************/
 
 // Default
-app.get(/^\/(?!(vendor|editor|codemirror|atlas)\/).*/, function(req, res) {
+app.get(/^\/(?!(vendor|editor|codemirror|config)\/).*/, function(req, res) {
     res.sendFile('index.html', {
         root: './target/build'
     });
@@ -27,13 +27,7 @@ app.get(/^\/(?!(vendor|editor|codemirror|atlas)\/).*/, function(req, res) {
 app.use('/vendor', express.static('./target/build/vendor'));
 app.use('/editor', express.static('./target/build/editor'));
 app.use('/codemirror', express.static('./target/build/codemirror'));
-
-// Proxy to Atlas API
-app.use("/atlas", function(req, res) {
-    apiProxy.web(req, res, {
-        target: 'http://atlas.dev.agora.odesk.com:7101/api/v1'
-    });
-});
+app.use('/config', express.static('./target/build/config'));
 
 /****************
  * SERVER
