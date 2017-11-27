@@ -293,7 +293,7 @@ angular.module('atlas.query.editor.query', [
 
                 var service = {
                     fetchConfig: function() {
-                        return $http.get('/config/config.json')
+                        return $http.get('/config/config.json', {cache: true})
                             .then(function(response) {
                                 var hostMap = response.data;
                                 return hostMap;

@@ -43,6 +43,7 @@ angular.module('atlas.query.editor', [
                 templateUrl: 'editor/editor.tpl.html',
                 controller: 'EditorController',
                 controllerAs: 'editorCtrl',
+                reloadOnSearch: false,
                 resolve: {
                     config: [
                         'atlasQueryService',
