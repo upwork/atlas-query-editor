@@ -324,10 +324,23 @@ angular.module('atlas.query.editor.query', [
                         return atlasUrl + '/graph?' + $httpParamSerializer(query) + (format ? '&format=' + format : '');
                     },
                     fetchTags: function() {
-                        return $http.get(service.tagUrl())
-                            .then(function(response) {
+                        return $http.get(service.tagUrl(), {
+                            cache: true
+                        }).then(function(response) {
+                            return response.data;
+                        });
+                    },
+                    checkConnection: function(atlasUrl) {
+                        return $http.get(atlasUrl + '/tags', {
+                            cache: true
+                        }).then(function(response) {
+                            var tagNames = response.data;
+                            if (angular.isArray(tagNames) && tagNames.indexOf('name') >= 0) {
                                 return response.data;
-                            });
+                            } else {
+                                return $q.reject('invalid response');
+                            }
+                        });
                     },
                     fetchGraph: function(query, format) {
                         if (format === 'png') {
@@ -355,17 +368,6 @@ angular.module('atlas.query.editor.query', [
                             }
                             return window.btoa(binary);
                         }
-                    },
-                    checkConnection: function(atlasUrl) {
-                        return $http.get(atlasUrl + '/tags')
-                            .then(function(response) {
-                                var tagNames = response.data;
-                                if (angular.isArray(tagNames) && tagNames.indexOf('name') >= 0) {
-                                    return response.data;
-                                } else {
-                                    return $q.reject('invalid response');
-                                }
-                            });
                     },
                     getStoredUrlList: function() {
                         try {
