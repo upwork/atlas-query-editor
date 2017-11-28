@@ -23,9 +23,9 @@
 a.otherwise({redirectTo:'/'}),a.when('/',{templateUrl:'editor/editor.tpl.html',controller:'EditorController',controllerAs:'editorCtrl',reloadOnSearch:!1,resolve:{config:['atlasQueryService',function(a){return a.fetchConfig()}]}})}]).controller('EditorController',['$scope','$location','atlasQueryToolsService','atlasQueryService','config',function(a,b,c,d,e){
 // -------------------------
 // Transformation Functions:
-function f(a){var b=a.host,c=angular.extend({q:''},a);return delete c.host,void 0!==c.w&&(c.w=1*c.w),void 0!==c.h&&(c.h=1*c.h),void 0!==c.zoom&&(c.zoom=1*c.zoom),{host:b,query:c}}function g(a){var b=angular.copy(a.query);return b.host=a.host,b}var h=this,i=_.find(e.hosts,{default:!0})||{url:null};
+function f(a){var b=a.host,c=angular.extend({q:''},a);return delete c.host,void 0!==c.w&&(c.w=1*c.w),void 0!==c.h&&(c.h=1*c.h),void 0!==c.zoom&&(c.zoom=1*c.zoom),{host:b,query:c}}function g(a){var b=angular.copy(a.query);return b.host=a.host,b}var h=this,i=_.find(e.hosts,{default:!0});i&&!b.search().host&&b.search('host',i.url),
 // Read search parameters to initialize
-h.data=angular.extend({format:'png',host:i.url,hostList:e.hosts||[],query:null},f(b.search())),h.result={format:null,data:null},
+h.data=angular.extend({hostList:e.hosts||[],host:null,query:null,format:'png'},f(b.search())),h.result={format:null,data:null},
 // Save / Load
 h.openSave=function(){c.openSave(h.data)},h.canOpenSave=function(){return h.data.host&&h.data.query.q},h.openLoad=function(){c.openLoad().then(function(a){h.result.format=null,h.result.data=null,angular.extend(h.data,a)})},
 // Import / Export
@@ -55,7 +55,7 @@ b.urlList=a.getStoredUrlList}],link:function(b,c,d,e){
 //Use for highlighting the field as red/green
 b.isHostValid=function(){return e.host.$valid},
 // When input is valid, update the url in atlasQueryService
-b.$watch(function(){return e.host.$valid},function(c){a.setBaseUrl(c?b.connCtrl.host:null)})}}}]).directive('atlasSelect',['atlasQueryService',function(a){return{restrict:'E',require:'^form',replace:!0,templateUrl:'editor/query/select.tpl.html',scope:{host:'=',hostList:'='},controllerAs:'selectCtrl',bindToController:!0,controller:[function(){var a=this;a.getMessage=function(b){var c=_.find(a.hostList,{url:b});return console.log('getMessage',c),c?c.message:null}}],link:function(b,c,d,e){
+b.$watch(function(){return e.host.$valid},function(c){a.setBaseUrl(c?b.connCtrl.host:null)})}}}]).directive('atlasSelect',['atlasQueryService',function(a){return{restrict:'E',require:'^form',replace:!0,templateUrl:'editor/query/select.tpl.html',scope:{host:'=',hostList:'='},controllerAs:'selectCtrl',bindToController:!0,controller:[function(){var a=this;a.getMessage=function(b){var c=_.find(a.hostList,{url:b});return c?c.message:null}}],link:function(b,c,d,e){
 //Use for highlighting the field as red/green
 b.isHostValid=function(){return e.host.$valid},
 // When input is valid, update the url in atlasQueryService
