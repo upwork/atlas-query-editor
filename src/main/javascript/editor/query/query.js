@@ -85,7 +85,6 @@ angular.module('atlas.query.editor.query', [
 
                         ctrl.getMessage = function(url) {
                             var host = _.find(ctrl.hostList, {url: url});
-                            console.log('getMessage', host);
                             return host ? host.message : null;
                         }
                     }

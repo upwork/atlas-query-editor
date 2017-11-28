@@ -63,14 +63,19 @@ angular.module('atlas.query.editor', [
         '$scope', '$location', 'atlasQueryToolsService', 'atlasQueryService', 'config',
         function($scope, $location, atlasQueryToolsService, atlasQueryService, config) {
             var ctrl = this;
-            var selectedHost = _.find(config.hosts, {'default': true}) || {url: null};
+
+            // Set default host, in case one is not defined in $location.search()
+            var defaultHost = _.find(config.hosts, {'default': true});
+            if (defaultHost && !$location.search().host) {
+                $location.search('host', defaultHost.url);
+            }
 
             // Read search parameters to initialize
             ctrl.data = angular.extend({
-                format: 'png',
-                host: selectedHost.url,
                 hostList: config.hosts || [],
-                query: null
+                host: null,
+                query: null,
+                format: 'png'
             }, fromLocation($location.search()));
             ctrl.result = {
                 format: null,
