@@ -334,11 +334,13 @@ angular.module('atlas.query.editor.query', [
                             cache: true
                         }).then(function(response) {
                             var tagNames = response.data;
-                            if (angular.isArray(tagNames) && tagNames.indexOf('name') >= 0) {
-                                return response.data;
-                            } else {
-                                return $q.reject('invalid response');
-                            }
+                            //TODO: Disable check until Atlas 1.6.0 is deployed
+                            // if (angular.isArray(tagNames) && tagNames.indexOf('name') >= 0) {
+                            //     return response.data;
+                            // } else {
+                            //     return $q.reject('invalid response');
+                            // }
+                            return tagNames;
                         });
                     },
                     fetchGraph: function(query, format) {
