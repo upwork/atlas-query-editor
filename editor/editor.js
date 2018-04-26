@@ -55,11 +55,15 @@ b.urlList=a.getStoredUrlList}],link:function(b,c,d,e){
 //Use for highlighting the field as red/green
 b.isHostValid=function(){return e.host.$valid},
 // When input is valid, update the url in atlasQueryService
-b.$watch(function(){return e.host.$valid},function(c){a.setBaseUrl(c?b.connCtrl.host:null)})}}}]).directive('atlasSelect',['atlasQueryService',function(a){return{restrict:'E',require:'^form',replace:!0,templateUrl:'editor/query/select.tpl.html',scope:{host:'=',hostList:'='},controllerAs:'selectCtrl',bindToController:!0,controller:[function(){var a=this;a.getMessage=function(b){var c=_.find(a.hostList,{url:b});return c?c.message:null}}],link:function(b,c,d,e){
+b.$watch(function(){
+// return the host if it's valid
+return e.host.$valid?b.selectCtrl.host:null},function(b){a.setBaseUrl(b)})}}}]).directive('atlasSelect',['atlasQueryService',function(a){return{restrict:'E',require:'^form',replace:!0,templateUrl:'editor/query/select.tpl.html',scope:{host:'=',hostList:'='},controllerAs:'selectCtrl',bindToController:!0,controller:[function(){var a=this;a.getMessage=function(b){var c=_.find(a.hostList,{url:b});return c?c.message:null}}],link:function(b,c,d,e){
 //Use for highlighting the field as red/green
 b.isHostValid=function(){return e.host.$valid},
 // When input is valid, update the url in atlasQueryService
-b.$watch(function(){return e.host.$valid},function(c){a.setBaseUrl(c?b.selectCtrl.host:null)})}}}]).directive('atlasValidateConnection',['$q','atlasQueryService',function(a,b){return{restrict:'A',require:'ngModel',link:function(c,d,e,f){f.$asyncValidators.connection=function(c,d){var e=c||d;return f.$isEmpty(e)?a.when('OK'):b.checkConnection(c)}}}}]).directive('atlasQueryEditor',['$http',function(a){var b={q:'',step:null,
+b.$watch(function(){
+// return the host if it's valid
+return e.host.$valid?b.selectCtrl.host:null},function(b){a.setBaseUrl(b)})}}}]).directive('atlasValidateConnection',['$q','atlasQueryService',function(a,b){return{restrict:'A',require:'ngModel',link:function(c,d,e,f){f.$asyncValidators.connection=function(c,d){var e=c||d;return f.$isEmpty(e)?a.when('OK'):b.checkConnection(c)}}}}]).directive('atlasQueryEditor',['$http',function(a){var b={q:'',step:null,
 // (1) Time
 s:'e-3h',// Start time e-3h* Time
 e:'now',//End time now* Time
