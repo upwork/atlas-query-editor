@@ -160,6 +160,10 @@
         // Find the previous name value if present
         var previousNameMetricValue = (tokens.lastIndexOf('name') != -1) && (typeof tokens[tokens.lastIndexOf('name') + 1] != 'undefined') < tokens.length ? tokens[tokens.lastIndexOf('name') + 1] : null;
 
+        // Check if the there is an open parenthesis that has not been closed
+        // Parenthesis are used to indicate the start and end of a list
+        var isAList = tokens.lastIndexOf('(') > tokens.lastIndexOf(')');
+
         setTimeout(function() {
             function tagUrl(tagName, tagValue) {
                 if (!tagValue) {
@@ -177,7 +181,7 @@
                         displayText: 'value(' + previousWord + '(' + previousNameMetricValue + ')) ' + suggestion
                     });
                 });
-            } else if (previousWord && tagNames.indexOf(previousWord) >= 0) {
+            } else if (previousWord && tagNames.indexOf(previousWord) >= 0 && !isAList) {
                 if (apiPath) {
                     // If apiPath is not configured, only the values hints will be disabled
                     // Previous word is a tagName, => Add all matching tag values
