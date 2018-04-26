@@ -129,6 +129,10 @@
         var currentWord = (tokens.length > 1 ? tokens[tokens.length - 1] : tokens[0]).replace(/\s/g, '');
         var previousWord = tokens.length > 1 ? tokens[tokens.length - 2].replace(/\s/g, '') : null;
 
+        // Check if the there is an open parenthesis that has not been closed
+        // Parenthesis are used to indicate the start and end of a list
+        var isAList = tokens.lastIndexOf('(') > tokens.lastIndexOf(')');
+
         setTimeout(function() {
             function tagUrl(tagName, tagValue) {
                 if (!tagValue) {
@@ -139,7 +143,7 @@
 
             var list = [];
 
-            if (previousWord && tagNames.indexOf(previousWord) >= 0) {
+            if (previousWord && tagNames.indexOf(previousWord) >= 0 && !isAList) {
                 if (apiPath) {
                     // If apiPath is not configured, only the values hints will be disabled
                     // Previous word is a tagName, => Add all matching tag values
