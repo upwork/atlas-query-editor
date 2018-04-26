@@ -44,7 +44,6 @@ angular.module('atlas.query.editor.query', [
 
                         // Read the stored url list from service, for typeahead
                         ctrl.urlList = atlasQueryService.getStoredUrlList;
-
                     }
                 ],
                 link: function(scope, elm, atts, ngFormCtrl) {
@@ -56,9 +55,10 @@ angular.module('atlas.query.editor.query', [
 
                     // When input is valid, update the url in atlasQueryService
                     scope.$watch(function() {
-                        return ngFormCtrl.host.$valid;
-                    }, function(isValid) {
-                        atlasQueryService.setBaseUrl(isValid ? scope.connCtrl.host : null);
+                        // return the host if it's valid
+                        return ngFormCtrl.host.$valid ? scope.selectCtrl.host : null;
+                    }, function(atlasHost) {
+                        atlasQueryService.setBaseUrl(atlasHost);
                     });
                 }
             };
@@ -98,9 +98,10 @@ angular.module('atlas.query.editor.query', [
 
                     // When input is valid, update the url in atlasQueryService
                     scope.$watch(function() {
-                        return ngFormCtrl.host.$valid;
-                    }, function(isValid) {
-                        atlasQueryService.setBaseUrl(isValid ? scope.selectCtrl.host : null);
+                        // return the host if it's valid
+                        return ngFormCtrl.host.$valid ? scope.selectCtrl.host : null;
+                    }, function(atlasHost) {
+                        atlasQueryService.setBaseUrl(atlasHost);
                     });
                 }
             };
