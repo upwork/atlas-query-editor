@@ -34,6 +34,8 @@
         'or', 'order', 'over', 'pct', 'per-step', 'percentiles', 'pick', 'random', 're', 'reic', 'roll', 'rolling-count', 'rot', 'sdes', 'sdes-fast', 'sdes-simple', 'sdes-slow', 'sdes-slower', 'set', 'sort', 'sqrt', 'sset', 'stack', 'stat', 'stat-avg', 'stat-avg-mf', 'stat-max', 'stat-max-mf', 'stat-min', 'stat-min-mf', 'stat-total', 'sub', 'sum', 'swap', 'time', 'trend', 'true', 'tuck', 'vspan'
     ].reverse();
 
+    var statisticHintsMap, statisticRestrictionQueries = ['count,:eq', 'gauge,:eq', 'totalAmount,:eq', 'totalTime,:eq', 'duration,:eq', 'activeTasks,:eq', 'interval,:eq', 'count,:eq,bucket,:has,:and', 'totalAmount,:eq,bucket,:has,:and', 'totalTime,:eq,bucket,:has,:and', 'percentile,:eq,percentile,D,:re,:and', 'percentile,:eq,percentile,T,:re,:and'];
+
     // -----------------------------------
     // Atlas Mode
     // -----------------------------------
@@ -42,6 +44,7 @@
         // 1. modeConfig.apiPath: string (Required for hints)
         // 2. modeConfig.extraTags: []
         tagNames = mergeTagNames(tagNames, modeConfig.extraTags || []);
+        statisticHintsMap = fetchStatisticTags(modeConfig.apiPath);
 
         var states = {
             operator: new RegExp('^:(' + operations.join('|') + ')$'),
@@ -87,6 +90,32 @@
             }
             return result;
         }
+
+        function fetchStatisticTags(apiPath) {
+            var result = {};
+            if (apiPath) {
+                _.forEach(statisticRestrictionQueries, function(restrictionQuery) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', apiPath + '/tags/name?q=statistic,' + restrictionQuery);
+                    xhr.send(null);
+                    xhr.onreadystatechange = function() {
+                        var DONE = 4; // readyState 4 means the request is done.
+                        var OK = 200; // status 200 is a successful return.
+                        if (xhr.readyState === DONE && xhr.status === OK) {
+                            var values = JSON.parse(xhr.responseText);
+                            _.forEach(values, function(metricName) {
+                                if (typeof result[metricName] == 'undefined') {
+                                    result[metricName] = [restrictionQuery];
+                                } else if (!result[metricName].includes(restrictionQuery)) {
+                                    result[metricName].push(restrictionQuery);
+                                }
+                            });
+                        }
+                    };
+                });
+            }
+            return result;
+        }
     });
 
     // -----------------------------------
@@ -123,11 +152,13 @@
             ++end;
         }
 
-        // Read tokens (reads full string, maybe find some optimization as we need the last two tokens)
-        var tokens = editor.getRange({line: 0, ch: 0}, cursor).split(',');
+        // Read tokens removing whitespace (reads full string, maybe find some optimization as we need the last two tokens)
+        var tokens = editor.getRange({line: 0, ch: 0}, cursor).replace(/\s/g,"").split(',');
         // Keep last two
-        var currentWord = (tokens.length > 1 ? tokens[tokens.length - 1] : tokens[0]).replace(/\s/g, '');
-        var previousWord = tokens.length > 1 ? tokens[tokens.length - 2].replace(/\s/g, '') : null;
+        var currentWord = tokens.length > 1 ? tokens[tokens.length - 1] : tokens[0];
+        var previousWord = tokens.length > 1 ? tokens[tokens.length - 2] : null;
+        // Find the previous name value if present
+        var previousNameMetricValue = (tokens.lastIndexOf('name') != -1) && (typeof tokens[tokens.lastIndexOf('name') + 1] != 'undefined') < tokens.length ? tokens[tokens.lastIndexOf('name') + 1] : null;
 
         // Check if the there is an open parenthesis that has not been closed
         // Parenthesis are used to indicate the start and end of a list
@@ -143,7 +174,14 @@
 
             var list = [];
 
-            if (previousWord && tagNames.indexOf(previousWord) >= 0 && !isAList) {
+            if (previousWord == 'statistic' && previousNameMetricValue && typeof statisticHintsMap[previousNameMetricValue] != 'undefined') {
+                _.forEach(statisticHintsMap[previousNameMetricValue], function(suggestion) {
+                    list.push({
+                        text: suggestion,
+                        displayText: 'value(' + previousWord + '(' + previousNameMetricValue + ')) ' + suggestion
+                    });
+                });
+            } else if (previousWord && tagNames.indexOf(previousWord) >= 0 && !isAList) {
                 if (apiPath) {
                     // If apiPath is not configured, only the values hints will be disabled
                     // Previous word is a tagName, => Add all matching tag values
